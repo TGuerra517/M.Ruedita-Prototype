@@ -787,7 +787,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5af1f3852a22ce45b2dcb990bf30dd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WheelChairMovement
-  moveDistance: 0.5
+  impulseForce: 2
+  maxSpeed: 5
+  deceleration: 2
 --- !u!54 &1366976733
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -935,8 +937,8 @@ Transform:
   m_GameObject: {fileID: 1944613929}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.4888, y: 2.88, z: 8.20424}
-  m_LocalScale: {x: 23.147142, y: 1, z: 21.2374}
+  m_LocalPosition: {x: -2.4888, y: 2.88, z: 8.2042}
+  m_LocalScale: {x: 40.363987, y: 1, z: 71.937035}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

@@ -1,11 +1,16 @@
+
 using UnityEngine;
 
-public class WheelChairMovement : MonoBehaviour
+[RequireComponent(typeof(Rigidbody))]
+public class WheelchairMovement : MonoBehaviour
 {
     [Header("Movimiento")]
-    [SerializeField] private float moveDistance = 0.5f;
+    [SerializeField] private float impulseForce = 2f;
+    [SerializeField] private float maxSpeed = 5f;
+    [SerializeField] private float deceleration = 2f;
 
     private Rigidbody rb;
+    private float scrollInput;
 
     void Awake()
     {
@@ -14,22 +19,46 @@ public class WheelChairMovement : MonoBehaviour
 
     void Update()
     {
-        float scroll = Input.mouseScrollDelta.y;
-
-        if (scroll > 0)
-        {
-            Move(1);
-        }
-        else if (scroll < 0)
-        {
-            Move(-1);
-        }
+        // Detectamos el movimiento de la rueda
+        scrollInput += Input.mouseScrollDelta.y;
     }
 
-    void Move(int direction)
+    void FixedUpdate()
     {
-        Vector3 movement = transform.forward * direction * moveDistance;
+        // Aplicamos el impulso
+        if (scrollInput != 0)
+        {
+            rb.AddForce(
+                transform.forward * scrollInput * impulseForce,
+                ForceMode.VelocityChange
+            );
 
-        rb.MovePosition(rb.position + movement);
+            scrollInput = 0;
+        }
+
+        // Obtenemos la velocidad horizontal
+        Vector3 velocity = rb.linearVelocity;
+        Vector3 horizontalVelocity = new Vector3(
+            velocity.x, 0f, velocity.z
+        );
+
+        // Limitamos la velocidad maxima
+        horizontalVelocity = Vector3.ClampMagnitude(
+            horizontalVelocity, maxSpeed
+        );
+
+        // Aplicamos desaceleracion progresiva
+        horizontalVelocity = Vector3.MoveTowards(
+            horizontalVelocity,
+            Vector3.zero,
+            deceleration * Time.fixedDeltaTime
+        );
+
+        // Conservamos la velocidad vertical (gravedad)
+        rb.linearVelocity = new Vector3(
+            horizontalVelocity.x,
+            velocity.y,
+            horizontalVelocity.z
+        );
     }
 }
